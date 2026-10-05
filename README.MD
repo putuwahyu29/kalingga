@@ -1,11 +1,5 @@
 # Kalingga
 
-<div align="center">
-  <img src="icon.jpg" alt="Kalingga Logo" width="100" />
-  <h3>Aplikasi Pengolahan & Auto-Georeferensi Peta Wilkerstat BPS</h3>
-  <p>Aplikasi desktop Windows untuk otomasi pembacaan ID SLS, penamaan berkas, pembuatan ESRI World File (.jgw), dan sinkronisasi ke folder Satker.</p>
-</div>
-
 ---
 
 ## Fitur Utama
