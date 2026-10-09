@@ -4,11 +4,14 @@
 
 ## Fitur Utama
 
-- **Ekstraksi ID SLS & Wilayah**: Membaca kode SLS 16 digit, nama SLS, desa, kecamatan, dan kabupaten via AI OCR lokal serta barcode QR-LOC.
+- **Ekstraksi ID SLS & Wilayah**: Membaca kode SLS 16 digit, nama SLS, desa, kecamatan, dan barcode QR-LOC secara otomatis.
 - **Batch Renaming**: Mengganti nama berkas secara massal sesuai format standar (`{kode_sls}_WSS.jpg`) dengan fitur pemulihan (*Undo*).
 - **Auto-Georeferensi (.jgw / .pgw)**: Mencocokkan batas merah peta hasil scan dengan layer referensi `Final_SLS.geojson` untuk menghasilkan World File secara otomatis.
 - **GIS Overlay Studio**: Pratinjau tumpangsusun citra peta dengan citra satelit dan poligon GeoJSON, dilengkapi tombol koreksi manual, koreksi otomatis, dan shortcut buka langsung ke QGIS.
-- **Upload ke Folder Satker**: Pengunggahan berkas peta dan world file langsung ke cloud storage Satker tujuan dengan proteksi presisi data.
+- **Sesi Proyek Portabel (`.kalingga`)**: Simpan dan muat seluruh antrean pekerjaan ke berkas proyek mandiri `.kalingga` agar pekerjaan dapat dipindahkan dan dilanjutkan di perangkat lain tanpa kehilangan status.
+- **Bagi Wilayah & Arsip ZIP**: Pengelompokan berkas peta ke dalam struktur folder kode wilayah (Kecamatan / Desa) dan pembuatan arsip `.zip` otomatis per wilayah.
+- **Upload ke Folder Satker & Resiliensi Jaringan**: Pengunggahan berkas peta presisi ke cloud storage Satker dengan mekanisme cerdas *auto-retry* saat koneksi terputus dan tombol *Lewati Menunggu*.
+- **Mode Latar Belakang (System Tray)**: Aplikasi dapat berjalan di latar belakang (Windows Notification Area / System Tray) saat jendela ditutup, menjaga proses antrean tetap selesai.
 - **100% Offline & Mandiri**: Komputasi OCR dan georeferensi berjalan lokal di perangkat tanpa memerlukan koneksi internet.
 
 ---
@@ -18,10 +21,13 @@
 ### 1. Mode Otomatis (All-in-One Pipeline)
 Mode ini digunakan untuk memproses banyak berkas sekaligus:
 1. Pilih folder berkas peta scan dan muat berkas `Final_SLS.geojson`.
-2. Klik **Mulai Semua Proses**. Aplikasi akan menjalankan alur:
+2. Pilih metode eksekusi:
+   - **Pertahap (Rekomendasi - Tercepat):** Seluruh antrean diselesaikan per tahap secara massal. Memaksimalkan efisiensi cache prosesor, batching I/O sistem operasi, dan menghasilkan total waktu proses tersingkat.
+   - **Per-Berkas (Streaming Realtime):** Tiap berkas diproses tuntas dari Tahap 1 sampai Tahap 4 secara independen. Berkas yang selesai langsung tersedia di folder output secara bertahap tanpa menunggu antrean lain.
+3. Klik **Mulai Semua Proses**. Aplikasi akan menjalankan alur:
    $$\text{Cek ID SLS (OCR)} \longrightarrow \text{Ganti Nama Berkas} \longrightarrow \text{Georeferensi (.jgw)} \longrightarrow \text{Unggah Drive}$$
-3. **Proteksi Unggah Drive**: Hanya berkas yang berstatus **Presisi (Pas)** yang akan diunggah ke folder Satker. Berkas yang masih berstatus **Perlu Cek** atau memiliki peringatan otomatis ditahan demi menjaga kualitas data.
-4. Laporan ringkasan akhir menampilkan daftar berkas presisi, berkas yang perlu dicek, dan tombol untuk koreksi otomatis massal atau inspeksi visual.
+4. **Proteksi Unggah Drive**: Hanya berkas yang berstatus **Presisi (Pas)** yang akan diunggah ke folder Satker. Berkas yang masih berstatus **Perlu Cek** atau memiliki peringatan otomatis ditahan demi menjaga kualitas data.
+5. Laporan ringkasan akhir menampilkan daftar berkas presisi, berkas yang perlu dicek, dan tombol untuk koreksi otomatis massal atau inspeksi visual.
 
 ### 2. Mode Manual
 Setiap fitur dapat dijalankan secara terpisah dari menu utama:
@@ -29,6 +35,8 @@ Setiap fitur dapat dijalankan secara terpisah dari menu utama:
 - **2. Ganti Nama**: Mengganti nama berkas yang telah tervalidasi.
 - **3. Georeferensi**: Membuat berkas `.jgw` untuk berkas yang sudah memiliki ID SLS dan data GeoJSON.
 - **4. Unggah Drive**: Membuka modal pengunggahan ke folder Satker (dengan proteksi presisi aktif secara bawaan).
+- **Proyek**: Menyimpan atau memuat sesi kerja (`.kalingga`).
+- **Bagi Wilayah**: Memecah berkas hasil ke folder kode wilayah dan membuat arsip `.zip`.
 
 ---
 
@@ -53,6 +61,3 @@ Secara garis besar, Kalingga memproses peta melalui 4 tahapan berurutan:
 > Penjelasan teknis mendalam mengenai formula matematis, normalisasi EXIF, dan metode optimasi tiap tahapan dapat dibaca di berkas **[ALGORITHM.md](ALGORITHM.md)**.
 
 ---
-
-## Lisensi
-Hak Cipta © 2026 putuwahyu29. Dikembangkan untuk unit kerja Badan Pusat Statistik (BPS).
